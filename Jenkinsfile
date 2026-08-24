@@ -9,10 +9,11 @@ pipeline {
             }
         }
 
-        stage('Build Java App') {
+        stage('Build Java App using Docker') {
             steps {
-                echo 'Compiling and packaging the Spring Boot application...'
-                sh 'mvn clean package -DskipTests'
+                echo "Running Maven build inside a Docker container..."
+                // We mount the workspace to /app and run Maven inside a maven container
+                sh 'docker run --rm -v /var/jenkins_home/workspace/Asset-Backend:/app -w /app maven:3.9-eclipse-temurin-17 sh -c "mvn clean package -DskipTests"'
             }
         }
 
